@@ -801,6 +801,7 @@ h1 { margin: 0; font: 700 24px/1.1 var(--font-display); letter-spacing: -.01em; 
 /* ---------- map ---------- */
 #map { min-width: 0; height: 100%; background: var(--sea); font-family: var(--font-body); }
 .leaflet-container { background: var(--sea); font-family: var(--font-body); }
+.dark-tiles .leaflet-tile-pane { filter: invert(1) hue-rotate(180deg) brightness(.92) contrast(.88) saturate(.7); }
 .land { fill: var(--land); stroke: var(--coast); stroke-width: 1.2px; stroke-linejoin: round; }
 .grat { fill: none; stroke: var(--grid); stroke-width: 1px; }
 .leaflet-pane.leaflet-labels-pane { z-index: 450; pointer-events: none; }
@@ -940,19 +941,15 @@ h1 { margin: 0; font: 700 24px/1.1 var(--font-display); letter-spacing: -.01em; 
   }
 
   if (USE_TILES) {
-    var tileLayer = null;
-    var applyTiles = function () {
-      if (tileLayer) map.removeLayer(tileLayer);
-      var style = isDark() ? 'dark_all' : 'light_all';
-      tileLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/' + style + '/{z}/{x}/{y}{r}.png', {
-        subdomains: 'abcd', maxZoom: 19,
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>'
-      }).addTo(map);
-      tileLayer.bringToBack();
-    };
-    applyTiles();
-    matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTiles);
-    new MutationObserver(applyTiles).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    /* OpenStreetMap's own tiles: no API key. Fine for light traffic; see tile usage policy. */
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors'
+    }).addTo(map);
+    var syncDark = function () { map.getContainer().classList.toggle('dark-tiles', isDark()); };
+    syncDark();
+    matchMedia('(prefers-color-scheme: dark)').addEventListener('change', syncDark);
+    new MutationObserver(syncDark).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
   } else {
     attr.addAttribution('Coastline: Natural Earth');
     L.geoJSON(LAND, { style: { className: 'land', interactive: false } }).addTo(map);
