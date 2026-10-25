@@ -24,6 +24,7 @@
   --accent: #C8321F;
   --on-accent: #FFFFFF;
   --shadow: rgba(18, 48, 58, .18);
+  --me: #2B7BF5;
   --c-eat: #D8452B;
   --c-breakfast: #D99208;
   --c-drinks: #17917D;
@@ -37,7 +38,7 @@
   :root:not([data-theme="light"]) {
     --sea: #0C1A20; --land: #182A31; --coast: #3B5963; --grid: rgba(220, 240, 245, .06);
     --ink: #E6F0F2; --ink-2: #9DB5BC; --panel: #112028; --field: #1A2E37; --line: #26404A;
-    --accent: #FF6B52; --on-accent: #1A0B08; --shadow: rgba(0, 0, 0, .5);
+    --accent: #FF6B52; --on-accent: #1A0B08; --shadow: rgba(0, 0, 0, .5); --me: #6AA6FF;
     --c-eat: #FF7456; --c-breakfast: #F2B53A; --c-drinks: #3CC4AC; --c-sweets: #F06CA3;
     --c-markets: #8C97F2; --c-sights: #93A8B4;
     color-scheme: dark;
@@ -46,7 +47,7 @@
 :root[data-theme="dark"] {
   --sea: #0C1A20; --land: #182A31; --coast: #3B5963; --grid: rgba(220, 240, 245, .06);
   --ink: #E6F0F2; --ink-2: #9DB5BC; --panel: #112028; --field: #1A2E37; --line: #26404A;
-  --accent: #FF6B52; --on-accent: #1A0B08; --shadow: rgba(0, 0, 0, .5);
+  --accent: #FF6B52; --on-accent: #1A0B08; --shadow: rgba(0, 0, 0, .5); --me: #6AA6FF;
   --c-eat: #FF7456; --c-breakfast: #F2B53A; --c-drinks: #3CC4AC; --c-sweets: #F06CA3;
   --c-markets: #8C97F2; --c-sights: #93A8B4;
   color-scheme: dark;
@@ -798,6 +799,51 @@ h1 { margin: 0; font: 700 24px/1.1 var(--font-display); letter-spacing: -.01em; 
 .empty { padding: 36px 24px; text-align: center; color: var(--ink-2); }
 .empty strong { display: block; color: var(--ink); font: 700 17px var(--font-display); margin-bottom: 6px; }
 
+/* ---------- suggest a place ---------- */
+.sg-btn { flex: none; display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 14px 0 11px; border-radius: 999px; border: 1px solid var(--line); background: var(--panel); font-weight: 600; font-size: 13px; }
+.sg-btn:hover { border-color: var(--ink-2); }
+.suggest { padding: 0; border: 1px solid var(--line); border-radius: 18px; background: var(--panel); color: var(--ink); width: min(460px, calc(100% - 32px)); max-height: calc(100% - 32px); box-shadow: 0 20px 60px var(--shadow); font: 14px/1.45 var(--font-body); overflow: auto; }
+.suggest::backdrop { background: rgba(8, 20, 26, .55); }
+.sg-body { padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 14px; }
+.sg-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.sg-head h2, .sg-done h2 { margin: 0; font: 700 22px/1.2 var(--font-display); }
+.sg-x { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 50%; border: 0; background: var(--field); }
+.sg-help { margin: 0; color: var(--ink-2); }
+.sg-field { display: flex; flex-direction: column; gap: 6px; }
+.sg-field label { font-weight: 600; font-size: 13px; }
+.sg-req { font-weight: 500; color: var(--ink-2); margin-left: 4px; }
+.sg-field input, .sg-field select, .sg-field textarea { width: 100%; box-sizing: border-box; padding: 11px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--field); font-size: 16px; line-height: 1.35; }
+.sg-field input, .sg-field select { height: 44px; padding-top: 0; padding-bottom: 0; }
+.sg-field textarea { resize: vertical; min-height: 84px; }
+.sg-field input[aria-invalid="true"] { border-color: var(--accent); }
+.sg-trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.sg-error { margin: 0; padding: 9px 12px; border-radius: 10px; background: var(--field); border: 1px solid var(--accent); }
+.sg-error a { color: var(--accent); font-weight: 600; }
+.sg-actions { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; }
+.sg-ghost, .sg-send { height: 44px; padding: 0 18px; border-radius: 12px; font-weight: 600; }
+.sg-ghost { background: none; border: 1px solid var(--line); }
+.sg-send { background: var(--accent); border: 1px solid var(--accent); color: var(--on-accent); }
+.sg-send:disabled { opacity: .65; cursor: default; }
+@media (max-width: 760px) {
+  .suggest { width: 100%; max-width: none; margin: auto 0 0; border-radius: 20px 20px 0 0; border-bottom: 0; max-height: 92%; padding-bottom: env(safe-area-inset-bottom, 0px); }
+  .sg-actions > button { flex: 1; }
+}
+
+/* ---------- near me ---------- */
+.search-row { display: flex; gap: 8px; }
+.search-row .search { flex: 1; min-width: 0; }
+.near-btn { flex: none; display: inline-flex; align-items: center; gap: 7px; height: 44px; padding: 0 14px; border-radius: 12px; border: 1px solid var(--line); background: var(--panel); font-weight: 600; white-space: nowrap; }
+.near-btn:hover { border-color: var(--ink-2); }
+.near-btn[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.near-btn:disabled { opacity: .7; cursor: default; }
+.near-note { margin: 0; padding: 9px 12px; border-radius: 10px; background: var(--field); border: 1px solid var(--line); font-size: 13px; }
+.meta-actions { display: flex; gap: 14px; }
+.dist { color: var(--ink); font-weight: 600; text-transform: none; letter-spacing: .02em; }
+.me-wrap { background: none; border: 0; }
+.me-dot { display: block; width: 26px; height: 26px; box-sizing: border-box; border-radius: 50%; background: var(--me); border: 4px solid #fff; box-shadow: 0 0 0 1px rgba(0, 0, 0, .15), 0 2px 8px var(--shadow); }
+.me-acc { fill: var(--me); fill-opacity: .14; stroke: var(--me); stroke-width: 1px; stroke-opacity: .5; }
+.fm-popup .pop-dist { margin: 4px 0 0; color: var(--ink-2); font-weight: 600; }
+
 /* ---------- map ---------- */
 #map { min-width: 0; height: 100%; background: var(--sea); font-family: var(--font-body); }
 .leaflet-container { background: var(--sea); font-family: var(--font-body); }
@@ -880,21 +926,77 @@ h1 { margin: 0; font: 700 24px/1.1 var(--font-display); letter-spacing: -.01em; 
           <p class="eyebrow" lang="zh-Hant">台灣美食地圖</p>
           <h1>Taiwan Food Map</h1>
         </div>
-        <span class="total" id="total"></span>
+        <button class="sg-btn" id="sgOpen" type="button" aria-label="Suggest a place">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg>
+          <span>Suggest</span>
+        </button>
       </div>
       <p class="tagline">Hot spots to visit in Taipei (and a little beyond). Every place here has been visited in person.</p>
-      <div class="search">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-        <input id="q" type="search" placeholder="Search dishes, names, areas" autocomplete="off" aria-label="Search places">
+      <div class="search-row">
+        <div class="search">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input id="q" type="search" placeholder="Search food or area" autocomplete="off" aria-label="Search places">
+        </div>
+        <button class="near-btn" id="near" type="button" aria-pressed="false" title="Sort by distance from where you are">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
+          <span id="nearLabel">Near me</span>
+        </button>
       </div>
+      <p class="near-note" id="nearNote" role="status" hidden></p>
       <div class="chips" id="chips" role="group" aria-label="Filter by category"></div>
     </div>
     <div class="regions" id="regions" role="group" aria-label="Filter by region"></div>
-    <div class="meta"><span id="count" aria-live="polite"></span><button class="link-btn" id="clear" type="button" hidden>Clear filters</button></div>
+    <div class="meta"><span id="count" aria-live="polite"></span><div class="meta-actions"><button class="link-btn" id="resort" type="button" hidden>Update distances</button><button class="link-btn" id="clear" type="button" hidden>Clear filters</button></div></div>
     <ul class="list" id="list"></ul>
   </aside>
   <main id="map" aria-label="Map of places"></main>
 </div>
+
+<dialog id="suggest" class="suggest" aria-labelledby="sgTitle">
+  <form id="sgForm" class="sg-body" novalidate autocomplete="off">
+    <div class="sg-head">
+      <h2 id="sgTitle">Suggest a place</h2>
+      <button type="button" class="sg-x" id="sgClose" aria-label="Close">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+    <p class="sg-help">Know somewhere worth trying? Tell me about it. Suggestions are reviewed first, and only places that have been tried in person go on the map.</p>
+    <div class="sg-field">
+      <label for="sgName">Place name <span class="sg-req">required</span></label>
+      <input id="sgName" name="name" type="text" maxlength="120" placeholder="For example, Jin Feng Braised Pork Rice">
+    </div>
+    <div class="sg-field">
+      <label for="sgArea">Area</label>
+      <select id="sgArea" name="area"></select>
+    </div>
+    <div class="sg-field">
+      <label for="sgWhy">What to order, or why it's good</label>
+      <textarea id="sgWhy" name="why" rows="3" maxlength="600"></textarea>
+    </div>
+    <div class="sg-field">
+      <label for="sgLink">Google Maps link</label>
+      <input id="sgLink" name="link" type="url" inputmode="url" maxlength="300" placeholder="Paste a link from Google Maps (optional)">
+    </div>
+    <div class="sg-field">
+      <label for="sgFrom">Your name</label>
+      <input id="sgFrom" name="from" type="text" maxlength="60" autocomplete="name" placeholder="So I know who to thank (optional)">
+    </div>
+    <div class="sg-trap" aria-hidden="true"><label for="sgWeb">Leave this empty</label><input id="sgWeb" type="text" tabindex="-1" autocomplete="off"></div>
+    <p class="sg-error" id="sgErr" role="alert" hidden></p>
+    <div class="sg-actions">
+      <button type="button" class="sg-ghost" id="sgCancel">Cancel</button>
+      <button type="submit" class="sg-send" id="sgSend">Send suggestion</button>
+    </div>
+  </form>
+  <div class="sg-body sg-done" id="sgDone" hidden>
+    <h2>Thank you</h2>
+    <p class="sg-help">Your suggestion has been sent. It will be reviewed before anything is added to the map.</p>
+    <div class="sg-actions">
+      <button type="button" class="sg-ghost" id="sgAgain">Suggest another</button>
+      <button type="button" class="sg-send" id="sgDoneClose">Back to the map</button>
+    </div>
+  </div>
+</dialog>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.js"></script>
@@ -922,7 +1024,7 @@ h1 { margin: 0; font: 700 24px/1.1 var(--font-display); letter-spacing: -.01em; 
     byId.set(p.id, p);
   });
 
-  var state = { q: '', cats: new Set(), region: 'all' };
+  var state = { q: '', cats: new Set(), region: 'all', me: null, nearest: null };
 
   /* ---------- map ---------- */
   var map = L.map('map', {
@@ -996,6 +1098,7 @@ h1 { margin: 0; font: 700 24px/1.1 var(--font-display); letter-spacing: -.01em; 
     var h = '<div class="pop"><p class="pop-kicker cat-' + p.cat + '"><span class="dot"></span>' + esc(c.label) + ' · ' + esc(p.region) + '</p>';
     h += '<h3 class="pop-name">' + esc(p.name) + '</h3>';
     if (p.sub) h += '<p class="pop-sub">' + esc(p.sub) + '</p>';
+    if (state.me && p.dist != null) h += '<p class="pop-dist">' + fmtDist(p.dist) + ' from you</p>';
     if (p.note) h += '<p class="pop-note">' + esc(p.note) + '</p>';
     h += '<div class="pop-actions"><a class="btn btn-main" href="' + gm + '" target="_blank" rel="noopener">Open in Google Maps</a>';
     (p.links || []).filter(function (u) { return /^https?:\/\//i.test(u); }).forEach(function (u) {
@@ -1064,11 +1167,12 @@ h1 { margin: 0; font: 700 24px/1.1 var(--font-display); letter-spacing: -.01em; 
     var catOk = function (p) { return !state.cats.size || state.cats.has(p.cat); };
     var regOk = function (p) { return state.region === 'all' || p.region === state.region; };
     return {
-      list: searched.filter(function (p) { return catOk(p) && regOk(p); }),
+      list: sortNear(searched.filter(function (p) { return catOk(p) && regOk(p); })),
       catCounts: count(searched.filter(regOk), 'cat'),
       regCounts: count(searched.filter(catOk), 'region')
     };
   }
+  function sortNear(a) { if (state.me) a.sort(function (x, y) { return x.dist - y.dist; }); return a; }
   function count(arr, key) { var o = {}; arr.forEach(function (p) { o[p[key]] = (o[p[key]] || 0) + 1; }); return o; }
 
   var chipEls = {}, regEls = {};
@@ -1112,8 +1216,8 @@ h1 { margin: 0; font: 700 24px/1.1 var(--font-display); letter-spacing: -.01em; 
 
     var filtersOn = state.q.trim() || state.cats.size || state.region !== 'all';
     $('clear').hidden = !filtersOn;
-    $('count').textContent = list.length + (list.length === 1 ? ' place' : ' places') + (filtersOn ? ' match' : '');
-    $('total').textContent = places.length + ' places';
+    $('resort').hidden = !state.me;
+    $('count').textContent = list.length + (list.length === 1 ? ' place' : ' places') + (filtersOn ? ' match' : '') + (state.me ? ' · nearest first' : '');
 
     var ul = $('list'), frag = document.createDocumentFragment(), lastRegion = null;
     ul.textContent = '';
@@ -1124,7 +1228,7 @@ h1 { margin: 0; font: 700 24px/1.1 var(--font-display); letter-spacing: -.01em; 
       frag.appendChild(li);
     }
     list.forEach(function (p) {
-      if (state.region === 'all' && p.region !== lastRegion) {
+      if (state.region === 'all' && !state.me && p.region !== lastRegion) {
         var h = document.createElement('li');
         h.className = 'group'; h.textContent = p.region; lastRegion = p.region;
         frag.appendChild(h);
@@ -1135,7 +1239,7 @@ h1 { margin: 0; font: 700 24px/1.1 var(--font-display); letter-spacing: -.01em; 
       b.innerHTML = '<span class="dot"></span><span class="item-body"><span class="item-name">' + esc(p.name) + '</span>' +
         (p.sub ? '<span class="item-sub">' + esc(p.sub) + '</span>' : '') +
         (p.note ? '<span class="item-note">' + esc(p.note) + '</span>' : '') +
-        '<span class="item-tag">' + esc(catById[p.cat].label) + '</span></span>';
+        '<span class="item-tag">' + esc(catById[p.cat].label) + (state.me ? '<span class="dist"> · ' + fmtDist(p.dist) + '</span>' : '') + '</span></span>';
       b.addEventListener('click', function () { select(p.id); });
       li2.appendChild(b); frag.appendChild(li2);
     });
@@ -1154,8 +1258,11 @@ h1 { margin: 0; font: 700 24px/1.1 var(--font-display); letter-spacing: -.01em; 
   function fitTo(list) {
     if (!list.length) return;
     if (phone.matches && panel.dataset.sheet === 'open') { pendingFit = true; return; }
-    if (list.length === 1) { map.setView([list[0].lat, list[0].lng], 15, { animate: !reduced }); return; }
-    var b = L.latLngBounds(list.map(function (p) { return [p.lat, p.lng]; }));
+    var framing = state.me && !farAway();
+    if (list.length === 1 && !framing) { map.setView([list[0].lat, list[0].lng], 15, { animate: !reduced }); return; }
+    var pts = (framing ? list.slice(0, 8) : list).map(function (p) { return [p.lat, p.lng]; });
+    if (framing) pts.push([state.me.lat, state.me.lng]);
+    var b = L.latLngBounds(pts);
     map.fitBounds(b, { paddingTopLeft: [32, 56], paddingBottomRight: [32, 32 + sheetPad()], maxZoom: 14.5, animate: !reduced });
   }
 
@@ -1187,6 +1294,142 @@ h1 { margin: 0; font: 700 24px/1.1 var(--font-display); letter-spacing: -.01em; 
     state.q = ''; state.cats.clear(); state.region = 'all'; $('q').value = '';
     render(true);
   });
+
+  /* ---------- near me ---------- */
+  var nearBtn = $('near'), nearNote = $('nearNote');
+  var watchId = null, meMarker = null, meCircle = null, locating = false;
+  function toRad(d) { return d * Math.PI / 180; }
+  function haversine(aLat, aLng, bLat, bLng) {
+    var dLat = toRad(bLat - aLat), dLng = toRad(bLng - aLng);
+    var x = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(toRad(aLat)) * Math.cos(toRad(bLat)) * Math.sin(dLng / 2) * Math.sin(dLng / 2);
+    return 2 * 6371000 * Math.asin(Math.sqrt(x));
+  }
+  function fmtDist(m) {
+    if (m < 1000) return Math.max(10, Math.round(m / 10) * 10) + ' m';
+    if (m < 10000) return (m / 1000).toFixed(1) + ' km';
+    return Math.round(m / 1000).toLocaleString('en') + ' km';
+  }
+  function farAway() { return !!state.me && state.nearest > 150000; }
+  function updateDistances() {
+    var best = Infinity;
+    places.forEach(function (p) { p.dist = haversine(state.me.lat, state.me.lng, p.lat, p.lng); if (p.dist < best) best = p.dist; });
+    state.nearest = best;
+  }
+  function showNote(msg) {
+    nearNote.textContent = msg; nearNote.hidden = !msg;
+    if (msg && phone.matches) setSheet('open');
+  }
+  function setNearUi(mode) {
+    nearBtn.setAttribute('aria-pressed', String(mode === 'on'));
+    nearBtn.disabled = mode === 'busy';
+    $('nearLabel').textContent = mode === 'busy' ? 'Locating…' : 'Near me';
+    nearBtn.title = mode === 'on' ? 'Turn off nearest-first sorting' : 'Sort by distance from where you are';
+  }
+  function drawMe() {
+    var ll = [state.me.lat, state.me.lng];
+    if (!meMarker) {
+      meCircle = L.circle(ll, { radius: state.me.acc, className: 'me-acc', interactive: false }).addTo(map);
+      meMarker = L.marker(ll, { icon: L.divIcon({ className: 'me-wrap', html: '<span class="me-dot"></span>', iconSize: [26, 26] }), interactive: false, keyboard: false, zIndexOffset: 2000 }).addTo(map);
+    } else {
+      meMarker.setLatLng(ll); meCircle.setLatLng(ll).setRadius(state.me.acc);
+    }
+  }
+  function onFix(pos) {
+    var first = !state.me;
+    state.me = { lat: pos.coords.latitude, lng: pos.coords.longitude, acc: Math.min(pos.coords.accuracy || 50, 2000) };
+    drawMe();
+    if (!first) return;               /* later fixes only move the dot; the list re-sorts when asked */
+    locating = false; setNearUi('on'); updateDistances();
+    showNote(farAway() ? 'You are about ' + fmtDist(state.nearest) + ' from the nearest place on this map, so nothing is close yet. Distances are still shown.' : '');
+    render(false);
+    fitTo(compute().list);
+  }
+  function onFail(err) {
+    if (state.me) return;             /* ignore brief signal drops once we have a fix */
+    stopWatch(); locating = false; setNearUi('idle');
+    showNote(err.code === 1
+      ? 'Location is blocked for this page. Allow it in your browser\'s site settings, then tap Near me again. If you opened this link inside another app, open it in Safari or Chrome instead.'
+      : err.code === 3
+        ? 'Finding your location took too long. Try again, ideally outdoors or with Wi-Fi on.'
+        : 'Could not work out your location. Try again, ideally outdoors or with Wi-Fi on.');
+  }
+  function startWatch() {
+    if (watchId != null) return;
+    watchId = navigator.geolocation.watchPosition(onFix, onFail, { enableHighAccuracy: true, maximumAge: 5000, timeout: 20000 });
+  }
+  function stopWatch() { if (watchId != null) { navigator.geolocation.clearWatch(watchId); watchId = null; } }
+  function nearOff() {
+    stopWatch(); locating = false;
+    if (meMarker) { map.removeLayer(meMarker); map.removeLayer(meCircle); meMarker = meCircle = null; }
+    state.me = null; state.nearest = null;
+    places.forEach(function (p) { delete p.dist; });
+    setNearUi('idle'); showNote('');
+    render(true);
+  }
+  nearBtn.addEventListener('click', function () {
+    if (state.me || locating) { nearOff(); return; }
+    if (!('geolocation' in navigator) || !window.isSecureContext) { showNote('Location needs a secure (https) page and a browser that supports it.'); return; }
+    locating = true; setNearUi('busy'); showNote(''); startWatch();
+  });
+  $('resort').addEventListener('click', function () { if (state.me) { updateDistances(); render(false); } });
+  /* live dot pauses while the page is hidden to save battery */
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) stopWatch(); else if (state.me) startWatch();
+  });
+  if (!USE_TILES) nearBtn.hidden = true;  /* location is blocked inside the preview frame */
+
+  /* ---------- suggest a place ---------- */
+  var FORM = {
+    action: 'https://docs.google.com/forms/d/e/1FAIpQLSfe-7xGm5F4rK5hrO4CNPsI3YoVQX5gGamBHVrNpV286JXhZw/formResponse',
+    open: 'https://docs.google.com/forms/d/e/1FAIpQLSfe-7xGm5F4rK5hrO4CNPsI3YoVQX5gGamBHVrNpV286JXhZw/viewform',
+    fields: { name: 'entry.1619650992', area: 'entry.2119071289', why: 'entry.216856885', link: 'entry.564855479', from: 'entry.34862193' }
+  };
+  var sg = $('suggest'), sgForm = $('sgForm'), sgDone = $('sgDone'), sgErr = $('sgErr'), sgSend = $('sgSend');
+  var areaSel = $('sgArea');
+  [['', 'Choose an area']].concat(DATA.regions.map(function (r) { return [r, r]; })).concat([['Not sure', 'Not sure']]).forEach(function (o) {
+    var el = document.createElement('option'); el.value = o[0]; el.textContent = o[1]; areaSel.appendChild(el);
+  });
+  function sgShowForm() { sgForm.hidden = false; sgDone.hidden = true; }
+  function sgError(msg, field, html) {
+    sgErr.hidden = !msg;
+    if (html) sgErr.innerHTML = msg; else sgErr.textContent = msg || '';
+    ['sgName', 'sgLink'].forEach(function (id) { $(id).removeAttribute('aria-invalid'); });
+    if (field) { $(field).setAttribute('aria-invalid', 'true'); $(field).focus(); }
+  }
+  function sgOpen() { sgShowForm(); sgError(''); sgSend.disabled = false; sgSend.textContent = 'Send suggestion'; sg.showModal(); $('sgName').focus(); }
+  function sgClose() { sg.close(); }
+  $('sgOpen').addEventListener('click', sgOpen);
+  $('sgClose').addEventListener('click', sgClose);
+  $('sgCancel').addEventListener('click', sgClose);
+  $('sgDoneClose').addEventListener('click', sgClose);
+  $('sgAgain').addEventListener('click', function () { sgShowForm(); $('sgName').focus(); });
+  sg.addEventListener('click', function (e) { if (e.target === sg) sgClose(); });
+
+  sgForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var v = function (id) { return $(id).value.trim(); };
+    var name = v('sgName'), link = v('sgLink');
+    if (!name) { sgError('Add the place name so I know what to look up.', 'sgName'); return; }
+    if (link && !/^https?:\/\//i.test(link)) { sgError('That does not look like a link. Paste the full link from Google Maps, or leave it blank.', 'sgLink'); return; }
+    sgError('');
+    var finish = function () {
+      sgForm.reset(); sgForm.hidden = true; sgDone.hidden = false; $('sgDoneClose').focus();
+    };
+    if ($('sgWeb').value) { finish(); return; }          /* hidden field filled in: a bot. Pretend it worked. */
+    var body = new URLSearchParams();
+    body.set(FORM.fields.name, name);
+    if (areaSel.value) body.set(FORM.fields.area, areaSel.value);
+    if (v('sgWhy')) body.set(FORM.fields.why, v('sgWhy'));
+    if (link) body.set(FORM.fields.link, link);
+    if (v('sgFrom')) body.set(FORM.fields.from, v('sgFrom'));
+    sgSend.disabled = true; sgSend.textContent = 'Sending…';
+    /* Google does not let a page read the reply (no-cors), so "sent" means the request left the device. */
+    fetch(FORM.action, { method: 'POST', mode: 'no-cors', body: body }).then(finish, function () {
+      sgSend.disabled = false; sgSend.textContent = 'Send suggestion';
+      sgError('Could not send that. Check your connection and try again, or <a href="' + FORM.open + '" target="_blank" rel="noopener">use the form directly</a>.', null, true);
+    });
+  });
+  if (!USE_TILES) $('sgOpen').hidden = true;  /* the preview frame blocks sending to Google */
 
   render(false);
   fitTo(places);
